@@ -186,7 +186,7 @@
       <br/>
       <input type = "submit" value = "Upload File" />
     </form>
-  <form action="/api/plane/download" method="GET">
+  <form action="/api/planes/download" method="GET">
     <input type="submit" value="Download" />
     </form>
   </body>

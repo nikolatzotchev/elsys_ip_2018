@@ -79,7 +79,7 @@ public class PlaneResource {
   }
 
   @GET
-  @Path("download")
+  @Path("/download")
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   public Response downloadCsv() {
     StreamingOutput fileStream = output -> {
