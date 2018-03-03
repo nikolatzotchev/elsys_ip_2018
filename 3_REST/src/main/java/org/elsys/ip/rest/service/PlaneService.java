@@ -9,11 +9,13 @@ public class PlaneService {
 
   private PlaneRepository planeRepository = new PlaneRepository();
 
+
   public List<Plane> getPlaneList(MultivaluedMap<String, String> params) {
     return planeRepository.getPlaneList(params);
   }
 
-  public List<Plane> getAllPlanes() {
+  public List<Plane> getAllPlanes()
+  {
     return planeRepository.getAllPlanes();
   }
   public Plane savePlane(Plane plane) {
@@ -25,10 +27,10 @@ public class PlaneService {
   }
 
   public Plane getPlane(int id) {
-    return planeRepository.getPlaneById(id).get();
+    return planeRepository.getPlaneById(id);
   }
 
   public Plane updatePlane(int id, Plane plane) {
-    return planeRepository.updatePlane(id, plane);
+    return planeRepository.updatePlane(plane);
   }
 }

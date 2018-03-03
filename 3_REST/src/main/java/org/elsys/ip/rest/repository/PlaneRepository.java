@@ -1,29 +1,26 @@
 package org.elsys.ip.rest.repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import javax.ws.rs.core.MultivaluedMap;
 import org.elsys.ip.rest.model.Plane;
+import org.elsys.ip.rest.persistence.HibernateUtil;
+import org.hibernate.Session;
 
 public class PlaneRepository {
-  private static List<Plane> planeList = new ArrayList<>(
-      Arrays.asList(
-          new Plane(1, "boing", "f14", 23.4, 3, 5, 1400.2, 500.0, 30000.0, 17600.0, 800.0, 144000000),
-          new Plane(2, "airbus", "a331", 23.4, 3, 5, 1400.2, 500.0, 30000.0, 17600.0, 800.0, 144000000),
-          new Plane(3, "airbus", null, 23.4, 3, 5, 1400.2, 500.0, 30000.0, 17600.0, 800.0, 144000000)
-
-      )
-  );
 
   public List<Plane> getAllPlanes() {
-    return planeList;
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    session.beginTransaction();
+    List<Plane> planes = session.createQuery("FROM Plane").list();
+    session.getTransaction().commit();
+    return planes;
   }
   public List<Plane> getPlaneList(MultivaluedMap<String, String> params) {
+    List<Plane> allPlanes = getAllPlanes();
     if (params.size() != 0) {
       List<Plane> filterPlanes = new ArrayList<>();
-      for (Plane plane : planeList) {
+      for (Plane plane : allPlanes) {
 
         if (params.get("id") != null &&
             !params.get("id").contains(String.valueOf(plane.getId()))) {
@@ -57,10 +54,6 @@ public class PlaneRepository {
             params.get("wingspan").contains(String.valueOf(plane.getWingspan()))) {
           continue;
         }
-        if (params.get("range") != null &&
-            params.get("range").contains(String.valueOf(plane.getRange()))) {
-          continue;
-        }
         if (params.get("fuelCapacity") != null &&
             params.get("fuelCapacity").contains(String.valueOf(plane.getFuelCapacity()))) {
           continue;
@@ -77,25 +70,37 @@ public class PlaneRepository {
       }
       return filterPlanes;
     }
-    return planeList;
+    return allPlanes;
   }
 
-  public Optional<Plane> getPlaneById(Integer id) {
-    return planeList.stream().filter(test -> test.getId() == id).findFirst();
-  }
-
-  public Plane savePlane(Plane plane) {
-    planeList.add(plane);
+  public Plane getPlaneById(Integer id) {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    session.beginTransaction();
+    Plane plane = session.get(Plane.class, id);
+    session.getTransaction().commit();
     return plane;
   }
 
-  public Plane updatePlane(Integer id, Plane plane) {
-    int realId = id - 1;
-    planeList.set(realId, plane);
+  public Plane savePlane(Plane plane) {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    session.beginTransaction();
+    session.save(plane);
+    session.getTransaction().commit();
+    return plane;
+  }
+
+  public Plane updatePlane(Plane plane) {
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    session.beginTransaction();
+    session.update(plane);
+    session.getTransaction().commit();
     return plane;
   }
 
   public void deletePlane(Integer id) {
-    planeList.removeIf(it -> it.getId() == id);
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    session.beginTransaction();
+    session.delete(getPlaneById(id));
+    session.getTransaction().commit();
   }
 }

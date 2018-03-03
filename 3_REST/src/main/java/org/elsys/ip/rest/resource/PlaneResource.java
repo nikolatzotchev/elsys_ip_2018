@@ -1,33 +1,21 @@
 package org.elsys.ip.rest.resource;
 
 import au.com.bytecode.opencsv.CSVReader;
-import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
@@ -42,8 +30,9 @@ public class PlaneResource {
   @GET
   @Produces("application/json")
   public List<Plane> getPlaneList(@Context UriInfo info) {
-    MultivaluedMap<String, String> params = info.getQueryParameters();
-    List<Plane> testList = planeService.getPlaneList(params);
+//    MultivaluedMap<String, String> params = info.getQueryParameters();
+//    List<Plane> testList = planeService.getPlaneList(params);
+    List<Plane> testList = planeService.getAllPlanes();
     return testList;
   }
 
@@ -59,7 +48,6 @@ public class PlaneResource {
   public List<Plane> postCsv(@FormDataParam("file") File file)
       throws IOException {
 
-    List<Plane> planeList = new ArrayList<>();
     CSVReader reader = new CSVReader(new FileReader(file));
     String[] nextLine;
     while ((nextLine = reader.readNext()) != null) {
@@ -67,15 +55,14 @@ public class PlaneResource {
         continue;
       }
       Plane plane;
-      plane = new Plane(Integer.parseInt(nextLine[0]), nextLine[1], nextLine[2],
+      plane = new Plane(nextLine[1], nextLine[2],
           Double.parseDouble(nextLine[3]), Integer.parseInt(nextLine[4]),
           Integer.parseInt(nextLine[5]), Double.parseDouble(nextLine[6]),
-          Double.parseDouble(nextLine[7]), Double.parseDouble(nextLine[8]), Double.parseDouble(nextLine[9]),
-          Double.parseDouble(nextLine[10]), Double.parseDouble(nextLine[11]));
+          Double.parseDouble(nextLine[7]), Double.parseDouble(nextLine[8]),
+          Double.parseDouble(nextLine[9]), Double.parseDouble(nextLine[10]));
       planeService.savePlane(plane);
-      planeList.add(plane);
     }
-    return planeList;
+    return planeService.getAllPlanes();
   }
 
   @GET
@@ -91,7 +78,6 @@ public class PlaneResource {
           output.write(String.format("%d,", plane.getSeats()).getBytes());
           output.write(String.format("%f,", plane.getLength()).getBytes());
           output.write(String.format("%f,", plane.getWingspan()).getBytes());
-          output.write(String.format("%f,", plane.getRange()).getBytes());
           output.write(String.format("%f,", plane.getFuelCapacity()).getBytes());
           output.write(String.format("%f,", plane.getSpeed()).getBytes());
           output.write(String.format("%f\n", plane.getPrice()).getBytes());
@@ -119,8 +105,9 @@ public class PlaneResource {
   }
 
   @POST
-  public Plane addPlane(Plane plane){
-    return planeService.savePlane(plane);
+  public List<Plane> addPlane(Plane plane){
+    planeService.savePlane(plane);
+    return planeService.getAllPlanes();
   }
 
   @PUT

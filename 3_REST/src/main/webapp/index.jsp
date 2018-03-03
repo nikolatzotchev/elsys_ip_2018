@@ -91,9 +91,10 @@
         method: "POST",
         url: "/api/planes",
         data: JSON.stringify(json),
-        headers: {"Content-Type": "application/json"}
-      }).done(function () {
-        loadTable()
+        headers: {"Content-Type": "application/json"},
+        success: function (data) {
+          loadTable(data)
+        }
       })
     }
     

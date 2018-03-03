@@ -1,0 +1,38 @@
+<hibernate-mapping>
+  <class name="org.elsys.ip.rest.model.Plane" table="plane">
+    <id name="id" type="java.lang.Integer">
+      <column name="id" />
+      <generator class="identity" />
+    </id>
+    <property name="manufacturer" type="string">
+      <column name="manufacturer" length="50"/>
+    </property>
+    <property name="model" type="string">
+      <column name="model" length="50"/>
+    </property>
+    <property name="weight" type="double">
+      <column name="weight"/>
+    </property>
+    <property name="cockpitCrew" type="java.lang.Integer">
+      <column name="cockpitCrew"/>
+    </property>
+    <property name="seats" type="java.lang.Integer">
+      <column name="seats"/>
+    </property>
+    <property name="length" type="double">
+      <column name="length"/>
+    </property>
+    <property name="wingspan" type="double">
+      <column name="wingspan"/>
+    </property>
+    <property name="fuelCapacity" type="double">
+      <column name="fuelCapacity"/>
+    </property>
+    <property name="speed" type="double">
+      <column name="speed"/>
+    </property>
+    <property name="price" type="double">
+      <column name="price"/>
+    </property>
+  </class>
+</hibernate-mapping>

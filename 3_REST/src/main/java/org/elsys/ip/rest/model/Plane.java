@@ -1,11 +1,9 @@
 package org.elsys.ip.rest.model;
 
-import com.sun.javafx.beans.IDProperty;
 import java.io.Serializable;
-import javax.annotation.Generated;
 
 public class Plane implements Serializable{
-  private int id;
+  private Integer id;
   private String manufacturer;
   private String model;
   private double weight;
@@ -13,14 +11,12 @@ public class Plane implements Serializable{
   private int seats;
   private double length;
   private double wingspan;
-  private double range;
   private double fuelCapacity;
   private double speed;
   private double price;
 
-  public Plane(int id, String manufacturer, String model, double weight, int cockpitCrew, int seats,
-      double lenght, double wingspan, double range, double fuelCapacity, double speed, double price) {
-    this.id = id;
+  public Plane(String manufacturer, String model, double weight, int cockpitCrew, int seats,
+      double lenght, double wingspan, double fuelCapacity, double speed, double price) {
     this.manufacturer = manufacturer;
     this.model = model;
     this.weight = weight;
@@ -28,7 +24,6 @@ public class Plane implements Serializable{
     this.seats = seats;
     this.length = lenght;
     this.wingspan = wingspan;
-    this.range = range;
     this.fuelCapacity = fuelCapacity;
     this.speed = speed;
     this.price = price;
@@ -36,11 +31,11 @@ public class Plane implements Serializable{
 
   public Plane() { }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -98,14 +93,6 @@ public class Plane implements Serializable{
 
   public void setWingspan(double wingspam) {
     this.wingspan = wingspam;
-  }
-
-  public double getRange() {
-    return range;
-  }
-
-  public void setRange(double range) {
-    this.range = range;
   }
 
   public double getFuelCapacity() {
